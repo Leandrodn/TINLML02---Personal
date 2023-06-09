@@ -1,4 +1,20 @@
-# TODO implement biggest different + and -
+'''
+This program implements a neural network, using matrices (not numpy), that learns to play determine if a 3x3 array contains a 'X' or a 'O'.
+The neural network consists of 9 input nodes and 2 output nodes.
+The neural network is trained using test data from testData.py.
+The neural network is tested using test data from testData.py.
+The neural network is trained using the backpropagation algorithm.
+
+Author: Leandro de Nijs
+
+Goals of this program:
+- Pure python implementation of a neural network to distinguish between 'X' and 'O'.
+- Consists of only matrices and vectors.
+- Softmax function is used as activation function.
+- Training is done using the backpropagation algorithm.
+- MSE is used as cost function.
+'''
+
 import testData
 import math
 import random
@@ -13,6 +29,7 @@ costThreshold = 0.01
 learningRate = 0.1
     
 def computeAverageCost():
+    ''' Computes the average cost of the neural network. '''
     totalCost = 0
     for data in testData.trainingSet:
         inputVector = []
@@ -23,16 +40,31 @@ def computeAverageCost():
     return totalCost / len(testData.trainingSet)
 
 def costFunc(output, target):
+    ''' Computes the cost of the neural networ using the MSE cost function.
+    :param output: The output of the neural network.
+    :param target: The expected output of the neural network.
+    :return: The cost of the neural network.'''
+
     return sum([(output[i] - target[i])**2 for i in range(len(output))])
 
 def softmax(output):
+    ''' Computes the softmax of the output of the neural network.
+    :param output: The output of the neural network.
+    :return: The softmax of the output of the neural network.
+    '''
     sumOfExp = sum([math.exp(x) for x in output])
     return [math.exp(x) / sumOfExp for x in output]
 
 def matrixMult(matrix, vector):
+    ''' Multiplies a matrix with a vector. 
+    :param matrix: The matrix.
+    :param vector: The vector.
+    :return: The product of the matrix and the vector.
+    '''
     return [sum([matrix[i][j] * vector[j] for j in range(len(vector))]) for i in range(len(matrix))]
 
 def train():
+    ''' Trains the neural network using the backpropagation algorithm.'''
     print('training...')
     averageCost = computeAverageCost()
     currentIteration = 0
@@ -57,6 +89,7 @@ def train():
     print('average cost after training: ' + str(averageCost))
 
 def test():
+    ''' Tests the neural network using the test data.'''
     print('testing...')
 
     for data in testData.testSet:
@@ -69,7 +102,10 @@ def test():
     
             
 if __name__ == '__main__':
+    # The input vector
     inputVector = []
+
+    # The weights of the neural network
     weightsInputOutput = [[random.randrange(-3, 5) for i in range(nrOfRows * nrOfColumns)] for j in range(nrOfSymbols)]
 
     train()
